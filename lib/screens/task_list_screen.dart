@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'add_task_screen.dart';
 import '/models/task.dart';
-
 
 class TaskListScreen extends StatefulWidget {
   @override
@@ -34,24 +34,26 @@ class _TaskListScreenState extends State<TaskListScreen> {
       appBar: AppBar(
         title: Text('To-Do List'),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Swipe to Delete Task',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Swipe to Delete Task',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          tasks.isEmpty
-              ? Center(
-                  child: Text(
-                    'No tasks yet!',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                )
-              : Expanded(
-                  child: ListView.builder(
+            tasks.isEmpty
+                ? Center(
+                    child: Text(
+                      'No tasks yet!',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: tasks.length,
                     itemBuilder: (context, index) {
                       return Dismissible(
@@ -97,12 +99,15 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       );
                     },
                   ),
-                ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final result = await Navigator.pushNamed(context, '/add');
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddTaskScreen()),
+          );
           if (result != null) {
             addTask(result as String);
           }
